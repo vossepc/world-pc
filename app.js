@@ -28,8 +28,16 @@ const PEOPLE = [
 ];
 const personById = Object.fromEntries(PEOPLE.map((p) => [p.id, p]));
 
-let activePerson = localStorage.getItem("worldpc_person") || "vosse";
+// A link can open straight to one person's map with ?as=paksy (etc).
+// Falls back to whichever person this device last used, then to Vosse.
+const urlPerson = new URLSearchParams(location.search).get("as");
+let activePerson = (urlPerson && personById[urlPerson])
+  ? urlPerson
+  : (localStorage.getItem("worldpc_person") || "vosse");
 if (!personById[activePerson]) activePerson = "vosse";
+if (urlPerson && personById[urlPerson]) {
+  localStorage.setItem("worldpc_person", urlPerson);
+}
 
 // visits state, kept live from Firestore
 // visitsByPerson: { personId: Set(countryId) }
@@ -427,7 +435,7 @@ function renderSearchResults(query) {
   }
 
   const visited = visitsByPerson[activePerson];
-  el.innerHTML = list.slice(0, 60).map((c) => `
+  el.innerHTML = list.map((c) => `
     <li class="sr-row">
       <span class="sr-flag">${c.flag}</span>
       <span class="sr-name">${c.name}</span>
