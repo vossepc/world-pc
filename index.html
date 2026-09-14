@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<title>World PC</title>
+<meta name="description" content="A family country-tracking globe." />
+<link rel="icon" href="assets/icons/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Josefin+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ================= Splash ================= -->
+<div id="splash">
+  <div class="splash-frame">
+    <img src="assets/img/cover.jpg" alt="" class="splash-photo" />
+    <div class="splash-gradient"></div>
+    <div class="splash-content">
+      <div class="splash-rule"></div>
+      <h1 class="splash-title">World&nbsp;PC</h1>
+      <p class="splash-sub">a family collection of places</p>
+      <div class="splash-rule"></div>
+      <button id="splash-enter" class="btn-gold">Enter</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= App shell ================= -->
+<div id="app" hidden>
+
+  <!-- top bar -->
+  <header class="topbar">
+    <button id="person-toggle" class="person-toggle" aria-haspopup="true" aria-expanded="false">
+      <span class="person-toggle-ring"><img id="person-toggle-icon" src="" alt="" /></span>
+      <span class="chevron">&#9662;</span>
+    </button>
+
+    <div class="brand">
+      <span class="brand-word">WORLD</span><span class="brand-dot">&#9670;</span><span class="brand-word">PC</span>
+    </div>
+
+    <div class="topbar-spacer"></div>
+  </header>
+
+  <!-- person dropdown -->
+  <div id="person-menu" class="person-menu" hidden>
+    <div class="person-menu-inner">
+      <button class="person-row" data-person="paksy">
+        <span class="person-row-ring c-paksy"><img src="assets/icons/paksy.jpg" alt="" /></span>
+        <span class="person-row-name">Paksy</span>
+        <span class="person-row-count" data-count="paksy">0</span>
+      </button>
+      <button class="person-row" data-person="brian">
+        <span class="person-row-ring c-brian"><img src="assets/icons/brian.jpg" alt="" /></span>
+        <span class="person-row-name">Brian</span>
+        <span class="person-row-count" data-count="brian">0</span>
+      </button>
+      <button class="person-row" data-person="allard">
+        <span class="person-row-ring c-allard"><img src="assets/icons/allard.jpg" alt="" /></span>
+        <span class="person-row-name">Allard</span>
+        <span class="person-row-count" data-count="allard">0</span>
+      </button>
+      <button class="person-row" data-person="vosse">
+        <span class="person-row-ring c-vosse"><img src="assets/icons/vosse.jpg" alt="" /></span>
+        <span class="person-row-name">Vosse</span>
+        <span class="person-row-count" data-count="vosse">0</span>
+      </button>
+    </div>
+  </div>
+  <div id="person-menu-backdrop" class="backdrop" hidden></div>
+
+  <!-- swipeable track: [ leaderboard | globe | search ] -->
+  <main id="track" class="track">
+
+    <!-- ============ Leaderboard (swipe right from globe) ============ -->
+    <section class="page page-leaderboard" aria-label="Leaderboard">
+      <h2 class="page-title">Leaderboard</h2>
+      <p class="page-sub">countries visited, by explorer</p>
+      <ol id="leaderboard-list" class="leaderboard-list"></ol>
+      <div class="swipe-hint swipe-hint-right">&#8250; swipe back to globe</div>
+    </section>
+
+    <!-- ============ Globe (home) ============ -->
+    <section class="page page-globe" aria-label="Globe">
+      <div class="globe-wrap">
+        <svg id="globe-svg" class="globe-svg"></svg>
+        <div id="globe-tooltip" class="globe-tooltip" hidden></div>
+      </div>
+      <div class="globe-caption">
+        <span id="active-name" class="active-name">Vosse</span>
+        <span class="active-sep">&#183;</span>
+        <span id="active-count">0</span>&nbsp;countries
+      </div>
+      <button id="nav-left" class="nav-arrow nav-arrow-left" aria-label="Open leaderboard">&#8249;</button>
+      <button id="nav-right" class="nav-arrow nav-arrow-right" aria-label="Open search">&#8250;</button>
+      <div class="page-dots">
+        <span class="dot" data-dot="0"></span>
+        <span class="dot" data-dot="1"></span>
+        <span class="dot" data-dot="2"></span>
+      </div>
+    </section>
+
+    <!-- ============ Search (swipe left from globe) ============ -->
+    <section class="page page-search" aria-label="Add a country">
+      <div class="swipe-hint swipe-hint-left">swipe back to globe &#8250;</div>
+      <h2 class="page-title">Add a Country</h2>
+      <div class="search-box">
+        <input id="search-input" type="text" placeholder="Type a country&hellip;" autocomplete="off" spellcheck="false" />
+      </div>
+      <ul id="search-results" class="search-results"></ul>
+    </section>
+
+  </main>
+</div>
+
+<!-- ================= Country / photo modal ================= -->
+<div id="modal-backdrop" class="backdrop modal-backdrop" hidden></div>
+<div id="country-modal" class="country-modal" hidden>
+  <button id="modal-close" class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-head">
+    <span id="modal-flag" class="modal-flag"></span>
+    <h3 id="modal-country-name"></h3>
+  </div>
+  <div id="modal-photo-grid" class="modal-photo-grid"></div>
+  <label class="modal-add-photo btn-gold-outline">
+    <input id="modal-photo-input" type="file" accept="image/*" hidden />
+    &#10010; Add a photo
+  </label>
+  <p class="modal-hint">Photos are visible to everyone in the family.</p>
+</div>
+
+<!-- toast -->
+<div id="toast" class="toast" hidden></div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+<script type="module" src="app.js"></script>
+</body>
+</html>

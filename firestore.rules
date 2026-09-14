@@ -1,0 +1,33 @@
+rules_version = '2';
+
+// World PC — Firestore security rules.
+// Paste this into Firebase Console → Firestore Database → Rules, then Publish.
+//
+// What this allows: anyone with your site's link can read the map data
+// (so the globe and leaderboard work with no login), and can add or
+// remove countries / photos, as long as the data they write looks like
+// a real "visit" (one of the four family names, a country code, etc).
+// There is no login system in this app, so this is intentionally open —
+// treat the link like a shared family scrapbook, not a private account.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /visits/{visitId} {
+      allow read: if true;
+      allow create, update: if request.resource.data.keys().hasAll(['person', 'country', 'countryName'])
+                     && request.resource.data.person in ['paksy', 'brian', 'allard', 'vosse']
+                     && request.resource.data.country is string
+                     && request.resource.data.countryName is string;
+      allow delete: if true;
+
+      match /photos/{photoId} {
+        allow read: if true;
+        allow create: if request.resource.data.keys().hasAll(['dataUrl'])
+                       && request.resource.data.dataUrl is string
+                       && request.resource.data.dataUrl.size() < 900000;
+        allow delete: if true;
+      }
+    }
+  }
+}
